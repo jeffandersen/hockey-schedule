@@ -6,14 +6,14 @@
   </head>
   <body>
     <div class="container">
-      <h1>Is hockey on tv?</h1>
-      <p>Navigate the labyrinth that is the Rogers NHL broadcast contract. Simply select your cable provider and find out what channel number your game of choice is on.</p>
+      <h1>Is Hockey on TV?</h1>
+      <p>Navigating the labyrinth that is the Rogers NHL broadcast contract is annoying. Simply select your cable provider and find out what channel number your game of choice is on.</p>
       <p><select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
         <option value='/?provider=<%= provider %>'>Selected: <%= provider %></option>
         <% providers.forEach(function(p) { %>
         <option value="/?provider=<%= p %>"><%= p %></option>
         <% }) %>
-      </select></p>
+      </select> &nbsp; <a href="mailto:ishockeyontv@gmail.com?subject=Provider suggestion" class="small">Suggest a provider</a></p>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -26,6 +26,7 @@
           </tr>
         </thead>
         <% games.forEach(function(game) { -%>
+        <% var day = new Date(game.date); %>
         <% if (!game.home || !game.away) { return } %>
         <tr>
           <td><%= game.date %></td>
