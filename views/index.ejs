@@ -9,12 +9,26 @@
     <div class="container">
       <h1>Is Hockey on TV?</h1>
       <p>Navigating the labyrinth that is the Rogers NHL broadcast contract is annoying. Simply select your cable provider and find out what channel number your game of choice is on.</p>
-      <p><select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
-        <option value='/?provider=<%= provider %>'>Selected: <%= provider %></option>
-        <% providers.forEach(function(p) { %>
-        <option value="/?provider=<%= p %>"><%= p %></option>
-        <% }) %>
-      </select> &nbsp; <a href="mailto:ishockeyontv@gmail.com?subject=Provider suggestion" class="small">Suggest a provider</a></p>
+      <% if (teams) { -%>
+      <p class="pull-left">Filter by team:
+        <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+          <option>Showing: &nbsp; <%= team || 'All' %></option>
+          <option value="/?provider=<%= provider %>">All</option>
+          <% teams.forEach(function(t) { %>
+          <option value="/?team=<%= t %>&provider=<%= provider %>"><%= t %></option>
+          <% }) %>
+        </select>
+      </p>
+      <% } -%>
+      <p class="pull-right">
+        <a href="mailto:ishockeyontv@gmail.com?subject=Provider suggestion" class="small">Suggest a provider</a> &nbsp; 
+        <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+          <option>Selected: <%= provider %></option>
+          <% providers.forEach(function(p) { %>
+          <option value="/?provider=<%= p %><% if (teams && team) { %>&team=<%=team %><% } %>"><%= p %></option>
+          <% }) %>
+        </select>
+      </p>
       <table class="table table-condensed table-striped">
         <thead>
           <tr>
@@ -28,8 +42,9 @@
         <% var day = 0; %>
         <% games.forEach(function(game) { -%>
         <% if (!game.home || !game.away) { return } %>
+        <% if (team && !(game.home === team || game.away === team)) { return } %>
         <% var current = new Date(game.date).getDate(); %>
-        <% if (current > day) { %>
+        <% if (current !== day) { %>
         <tr>
           <td colspan="6" class="small"><strong><%= game.date %></strong></td>
         </tr>
