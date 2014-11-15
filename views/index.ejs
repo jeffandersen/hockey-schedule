@@ -3,6 +3,7 @@
   <head>
     <title><%= title %></title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
   </head>
   <body>
     <div class="container">
@@ -14,10 +15,9 @@
         <option value="/?provider=<%= p %>"><%= p %></option>
         <% }) %>
       </select> &nbsp; <a href="mailto:ishockeyontv@gmail.com?subject=Provider suggestion" class="small">Suggest a provider</a></p>
-      <table class="table table-striped">
+      <table class="table table-condensed table-striped">
         <thead>
           <tr>
-            <th>Date</th>
             <th>Time</th>
             <th>Home</th>
             <th>Away</th>
@@ -25,11 +25,16 @@
             <th>Channel Number</th>
           </tr>
         </thead>
+        <% var day = 0; %>
         <% games.forEach(function(game) { -%>
-        <% var day = new Date(game.date); %>
         <% if (!game.home || !game.away) { return } %>
+        <% var current = new Date(game.date).getDate(); %>
+        <% if (current > day) { %>
         <tr>
-          <td><%= game.date %></td>
+          <td colspan="6" class="small"><strong><%= game.date %></strong></td>
+        </tr>
+        <% } %>
+        <tr>
           <td><%= game.time %></td>
           <td><%= game.home %></td>
           <td><%= game.away %></td>
@@ -45,6 +50,7 @@
           <td><%= channels %></td>
           <% } %>
         </tr>
+        <% day = current %>
         <% }) -%>
       </table>
     </div>
