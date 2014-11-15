@@ -2,8 +2,50 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/css/style.css' />
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
   </head>
   <body>
+    <div class="container">
+      <h1>Is hockey on tv?</h1>
+      <p>Navigate the labyrinth that is the Rogers NHL broadcast contract. Simply select your cable provider and find out what channel number your game of choice is on.</p>
+      <p><select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+        <option value='/?provider=<%= provider %>'>Selected: <%= provider %></option>
+        <% providers.forEach(function(p) { %>
+        <option value="/?provider=<%= p %>"><%= p %></option>
+        <% }) %>
+      </select></p>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Home</th>
+            <th>Away</th>
+            <th>Broadcast</th>
+            <th>Channel Number</th>
+          </tr>
+        </thead>
+        <% games.forEach(function(game) { -%>
+        <% if (!game.home || !game.away) { return } %>
+        <tr>
+          <td><%= game.date %></td>
+          <td><%= game.time %></td>
+          <td><%= game.home %></td>
+          <td><%= game.away %></td>
+          <td><%= game.tvInfo %></td>
+          <% var channels = game.channels && game.channels[provider]; %>
+          <% if (channels === undefined) { %>
+          <td>-</td>
+          <% } else if (Array.isArray(channels)) { %>
+          <td>Regional: <%= channels.join(',') %></td>
+          <% } else if (channels === null) { %>
+          <td>N/A</td>
+          <% } else { %>
+          <td><%= channels %></td>
+          <% } %>
+        </tr>
+        <% }) -%>
+      </table>
+    </div>
   </body>
 </html>
